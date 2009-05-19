@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#include <vmfile.h>
+#include <myvm.h>
 
 enum VmErrno vmerrno = VM_EOK;
 

@@ -1,5 +1,5 @@
-#ifndef _VM_FILE_H
-#define _VM_FILE_H
+#ifndef _MY_VM_H
+#define _MY_VM_H
 
 typedef struct _VmInst* VmInst;
 typedef struct _VmFile* VmFile;

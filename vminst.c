@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <vmfile.h>
+#include <myvm.h>
 
 struct _VmInst {
     unsigned char opcode;
