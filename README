@@ -1,0 +1,53 @@
+Design:
+
+1. Registers
+
+A,B,C,D,E,F (all are integers)
+
+PARAM1
+PARAM2
+PARAM3
+
+2. Instructions
+
+LOAD SOURCE, REGISTER:
+    SOURCE = literal, address, register
+
+ADD SOURCE, Reg: 
+SUB
+MUL
+DIV
+
+STDOUT SOURCE
+STDIN REGISTER
+STDERR SOURCE
+
+LOAD = 00
+ADD = 10
+SUB = 11
+MUL = 12
+DIV = 13
+STDIN = 50
+STDOUT = 51
+STDERR = 52
+
+
+ByteCode:
+MYVM01
+
+
+Language:
+
+a = 1
+b = 2
+
+match c against {
+    a {
+        stdout(b);
+    }
+
+    b {
+        stdout(c);
+
+    }
+}
