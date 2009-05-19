@@ -16,6 +16,9 @@ int main()
             vmfile_version_minor_get(vmfile));
     printf("Size: %d\n", vmfile_size_get(vmfile));
     printf("Entry: %d\n", vmfile_entry_get(vmfile));
+
+    vmfile_inst_print(vmfile);
+    vmfile_close(vmfile);
     
     return 0;
 }

@@ -23,6 +23,8 @@ enum VmErrno {
 extern enum VmErrno vmerrno;
 
 VmFile vmfile_open(int);
+void vmfile_inst_print(VmFile);
+void vmfile_close(VmFile);
 unsigned char* vmfile_header_get(VmFile);
 unsigned int vmfile_version_major_get(VmFile);
 unsigned int vmfile_version_minor_get(VmFile);

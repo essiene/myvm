@@ -107,3 +107,18 @@ unsigned int vmfile_entry_get(VmFile vmfile)
 {
     return vmfile->entry;
 }
+
+void vmfile_inst_print(VmFile vmfile)
+{
+    for(int i = 0; i < vmfile->size; i++) {
+        vminst_print(vmfile->code[i]);
+    }
+}
+
+void vmfile_close(VmFile vmfile)
+{
+    for(int i = 0; i< vmfile->size; i++) {
+        vminst_del(vmfile->code[i]);
+    }
+    free(vmfile);
+}
