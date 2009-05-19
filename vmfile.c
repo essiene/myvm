@@ -22,7 +22,10 @@ struct _VmFile {
     unsigned int entry;
 
     unsigned char unused[4];
+
+    VmInst *code;
 };
+
 
 
 VmFile vmfile_open(int fd)
@@ -62,6 +65,19 @@ VmFile vmfile_open(int fd)
     if(bytes != 4) {
         vmerrno = VM_ENOUNUSED;
         return NULL;
+    }
+
+    vmfile->code = calloc(sizeof(*(vmfile->code)), vmfile->size);
+
+    unsigned int entry = vmfile->entry;
+
+    for(int i = 0; i < vmfile->size; i++) {
+        vmfile->code[i] = vminst_new(fd, vmfile->entry);
+        if(vmfile->code[i] == NULL) {
+            return NULL;
+        }
+
+        entry = entry + sizeof(*(vmfile->code));
     }
 
     return vmfile;
