@@ -1,19 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <myvm.h>
-
-
-struct _VmState {
-    struct {
-        enum Register a;
-        enum Register b;
-        enum Register c;
-        enum Register d
-        enum Register e;
-        enum Register f;
-    } general;
-
-    unsigned int ip;
-};
-
 
 enum OpCode {
     LDR = 0x00,
@@ -36,6 +23,22 @@ enum Register {
 };
 
 
+struct _VmState {
+    struct {
+        enum Register a;
+        enum Register b;
+        enum Register c;
+        enum Register d;
+        enum Register e;
+        enum Register f;
+    } general;
+
+    unsigned int ip;
+};
+
+
+
+
 VmState vmstate_new(VmFile vmfile)
 {
     VmState state = calloc(sizeof(*state), 1);
@@ -44,7 +47,7 @@ VmState vmstate_new(VmFile vmfile)
         return NULL;
     }
 
-    state->ip = vmfile->entry;
+    state->ip = vmfile_entry_get(vmfile);
 
     return state;
 }

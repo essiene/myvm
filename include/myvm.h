@@ -3,6 +3,7 @@
 
 typedef struct _VmInst* VmInst;
 typedef struct _VmFile* VmFile;
+typedef struct _VmState* VmState;
 
 enum VmErrno {
     VM_EOK,
@@ -16,7 +17,8 @@ enum VmErrno {
     VM_ENEWINST,
     VM_EREADOPCODE,
     VM_EREADSOURCE,
-    VM_EREADTARGET
+    VM_EREADTARGET,
+    VM_ENOCREATESTATE
 };
 
 
@@ -34,5 +36,9 @@ unsigned int vmfile_entry_get(VmFile);
 VmInst vminst_new(int, unsigned int);
 void vminst_print(VmInst);
 void vminst_del(VmInst);
+
+VmState vmstate_new(VmFile);
+void vmstate_print(VmState);
+void vmstate_del(VmState);
 
 #endif
