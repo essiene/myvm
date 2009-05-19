@@ -1,7 +1,10 @@
 CC=gcc
 CFLAGS=-Wall -pedantic -std=c99 -O1 -Iinclude
 
-all: myvm.o vmfile.o
+all: myvm
+	@echo "All done"
+
+myvm: vminst.o vmfile.o myvm.o
 	$(CC) -o myvm $+
 
 
