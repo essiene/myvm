@@ -34,6 +34,9 @@ unsigned int vmfile_size_get(VmFile);
 unsigned int vmfile_entry_get(VmFile);
 
 VmInst vminst_new(int, unsigned int);
+unsigned char vminst_opcode_get(VmInst);
+unsigned char vminst_source_get(VmInst);
+unsigned char vminst_target_get(VmInst);
 void vminst_print(VmInst);
 void vminst_del(VmInst);
 

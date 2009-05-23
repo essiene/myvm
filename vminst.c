@@ -37,12 +37,26 @@ VmInst vminst_new(int fd, unsigned int pos)
     }
 
     return inst;
-
 }
 
 void vminst_print(VmInst vminst)
 {
     printf("%.2X%.2X%.2X\n", vminst->opcode, vminst->source, vminst->target);
+}
+
+unsigned char vminst_opcode_get(VmInst vminst)
+{
+    return vminst->opcode;
+}
+
+unsigned char vminst_source_get(VmInst vminst)
+{
+    return vminst->source;
+}
+
+unsigned char vminst_target_get(VmInst vminst)
+{
+    return vminst->target;
 }
 
 void vminst_del(VmInst vminst)
