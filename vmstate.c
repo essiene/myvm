@@ -1,26 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <myvm.h>
-
-enum OpCode {
-    LDR = 0x00,
-    ADD = 0x10,
-    SUB = 0x11,
-    MUL = 0x12,
-    DIV = 0x13,
-    IN = 0x50,
-    OUT = 0x51,
-    ERR = 0x52
-};
-
-enum Register {
-    RA = 0x00,
-    RB = 0x01,
-    RC = 0x02,
-    RD = 0x03,
-    RE = 0x04,
-    RF = 0x05
-};
 
 
 struct _VmState {
@@ -36,9 +17,6 @@ struct _VmState {
     unsigned int ip;
 };
 
-
-
-
 VmState vmstate_new(VmFile vmfile)
 {
     VmState state = calloc(sizeof(*state), 1);
@@ -47,8 +25,58 @@ VmState vmstate_new(VmFile vmfile)
         return NULL;
     }
 
-    state->ip = vmfile_entry_get(vmfile);
+    state->ip = vmfile_entry_get(vmfile) - 0x10; /* remove header size to adjust for zero */
+    return state;
+}
 
+unsigned char vmstate_general_get(VmState state, enum Register reg)
+{
+    switch(reg) {
+        case RA:
+            return state->general.a;
+        case RB:
+            return state->general.b;
+        case RC:
+            return state->general.c;
+        case RD:
+            return state->general.d;
+        case RE:
+            return state->general.e;
+        case RF:
+            return state->general.f;
+    }
+
+    return 0;
+}
+
+VmState vmstate_general_set(VmState state, enum Register reg, unsigned char data)
+{
+    switch(reg) {
+        case RA:
+            state->general.a = data;
+        case RB:
+            state->general.b = data;
+        case RC:
+            state->general.c = data;
+        case RD:
+            state->general.d = data;
+        case RE:
+            state->general.e = data;
+        case RF:
+            state->general.f = data;
+    }
+
+    return state;
+}
+
+unsigned int vmstate_ip_get(VmState state)
+{
+    return state->ip;
+}
+
+VmState vmstate_ip_inc(VmState state)
+{
+    state->ip += 1;
     return state;
 }
 
@@ -62,7 +90,7 @@ void vmstate_print(VmState state)
     printf("  Instruction Pointer: %.8x\n", state->ip);
 }
 
- void vmstate_del(VmState state)
+void vmstate_del(VmState state)
 {
     free(state);
 }
