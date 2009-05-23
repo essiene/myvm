@@ -1,11 +1,18 @@
 #include <stdio.h>
+#include <fcntl.h>
 #include <myvm.h>
 
 
 
-int main()
+int main(int argc, char** argv)
 {
-    VmFile vmfile = vmfile_open(0);
+    int fp = open(argv[1], O_RDONLY);
+    if(fp < 0) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    VmFile vmfile = vmfile_open(fp);
     if(vmfile == NULL) {
         printf("Error: %d\n", vmerrno);
         return vmerrno;
