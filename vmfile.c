@@ -109,6 +109,16 @@ unsigned int vmfile_entry_get(VmFile vmfile)
     return vmfile->entry;
 }
 
+VmInst vmfile_inst_fetch(VmFile vmfile, unsigned int addr)
+{
+    if(addr >= vmfile->size) {
+        return NULL;
+    }
+
+    return vmfile->code[addr];
+}
+
+
 void vmfile_inst_print(VmFile vmfile)
 {
     for(int i = 0; i < vmfile->size; i++) {
