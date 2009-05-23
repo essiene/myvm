@@ -45,13 +45,14 @@ enum VmErrno {
 extern enum VmErrno vmerrno;
 
 VmFile vmfile_open(int);
-void vmfile_inst_print(VmFile);
-void vmfile_close(VmFile);
+VmInst vmfile_inst_fetch(VmFile, unsigned int);
 unsigned char* vmfile_header_get(VmFile);
 unsigned int vmfile_version_major_get(VmFile);
 unsigned int vmfile_version_minor_get(VmFile);
 unsigned int vmfile_size_get(VmFile);
 unsigned int vmfile_entry_get(VmFile);
+void vmfile_inst_print(VmFile);
+void vmfile_close(VmFile);
 
 VmInst vminst_new(int, unsigned int);
 unsigned char vminst_opcode_get(VmInst);
@@ -61,6 +62,10 @@ void vminst_print(VmInst);
 void vminst_del(VmInst);
 
 VmState vmstate_new(VmFile);
+VmState vmstate_general_set(VmState, enum Register, unsigned char);
+VmState vmstate_ip_inc(VmState);
+unsigned char vmstate_general_get(VmState, enum Register);
+unsigned int vmstate_ip_get(VmState);
 void vmstate_print(VmState);
 void vmstate_del(VmState);
 
