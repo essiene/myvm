@@ -25,7 +25,15 @@ int main(int argc, char** argv)
     printf("Instructions: %d\n", vmfile_size_get(vmfile));
     printf("Instruction Dump:\n");
     vmfile_inst_print(vmfile);
+
+    printf("Output of Program\n");
+    VmState state = vmstate_new(vmfile);
+    Vm vm = vm_new(vmfile, state);
+    vm_start(vm);
+
     vmfile_close(vmfile);
+    vmstate_del(state);
+    vm_del(vm);
     
     return 0;
 }
