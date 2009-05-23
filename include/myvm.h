@@ -4,6 +4,7 @@
 typedef struct _VmInst* VmInst;
 typedef struct _VmFile* VmFile;
 typedef struct _VmState* VmState;
+typedef struct _Vm* Vm;
 
 enum OpCode {
     LDR = 0x00,
@@ -38,7 +39,8 @@ enum VmErrno {
     VM_EREADOPCODE,
     VM_EREADSOURCE,
     VM_EREADTARGET,
-    VM_ENOCREATESTATE
+    VM_ENOCREATESTATE,
+    VM_EVMCREATEERR
 };
 
 
@@ -68,5 +70,19 @@ unsigned char vmstate_general_get(VmState, enum Register);
 unsigned int vmstate_ip_get(VmState);
 void vmstate_print(VmState);
 void vmstate_del(VmState);
+
+Vm vm_new(VmFile, VmState);
+Vm vm_start(Vm);
+void vm_del(Vm);
+
+
+VmState op_ldr(VmState, VmInst);
+VmState op_add(VmState, VmInst);
+VmState op_sub(VmState, VmInst);
+VmState op_mul(VmState, VmInst);
+VmState op_div(VmState, VmInst);
+VmState op_in(VmState, VmInst);
+VmState op_out(VmState, VmInst);
+VmState op_err(VmState, VmInst);
 
 #endif
