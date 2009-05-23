@@ -21,9 +21,9 @@ int main(int argc, char** argv)
     printf("Header: %s\n", vmfile_header_get(vmfile));
     printf("Version : %d.%d\n", vmfile_version_major_get(vmfile),\
             vmfile_version_minor_get(vmfile));
-    printf("Size: %d\n", vmfile_size_get(vmfile));
-    printf("Entry: %d\n", vmfile_entry_get(vmfile));
-
+    printf("Start Of Code Segment: %d\n", vmfile_entry_get(vmfile));
+    printf("Instructions: %d\n", vmfile_size_get(vmfile));
+    printf("Instruction Dump:\n");
     vmfile_inst_print(vmfile);
     vmfile_close(vmfile);
     
