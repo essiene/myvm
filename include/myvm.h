@@ -5,6 +5,26 @@ typedef struct _VmInst* VmInst;
 typedef struct _VmFile* VmFile;
 typedef struct _VmState* VmState;
 
+enum OpCode {
+    LDR = 0x00,
+    ADD = 0x10,
+    SUB = 0x11,
+    MUL = 0x12,
+    DIV = 0x13,
+    IN = 0x50,
+    OUT = 0x51,
+    ERR = 0x52
+};
+
+enum Register {
+    RA = 0x00,
+    RB = 0x01,
+    RC = 0x02,
+    RD = 0x03,
+    RE = 0x04,
+    RF = 0x05
+};
+
 enum VmErrno {
     VM_EOK,
     VM_ENOMEM,
