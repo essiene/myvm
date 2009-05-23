@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -110,6 +111,7 @@ unsigned int vmfile_entry_get(VmFile vmfile)
 
 void vmfile_inst_print(VmFile vmfile)
 {
+    printf("Program Instructions\n");
     for(int i = 0; i < vmfile->size; i++) {
         vminst_print(vmfile->code[i]);
     }
