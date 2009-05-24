@@ -16,7 +16,8 @@ struct _VmState {
 
     struct {
         unsigned int equal:1;
-        unsigned int unused: 7;
+        unsigned int greater:1;
+        unsigned int unused:6;
     } flag;
 
     unsigned int ip;
@@ -107,6 +108,23 @@ VmState vmstate_flag_equal_set_false(VmState state)
 unsigned int vmstate_flag_equal_get(VmState state)
 {
     return state->flag.equal;
+}
+
+VmState vmstate_flag_greater_set_true(VmState state)
+{
+    state->flag.greater = 0x1;
+    return state;
+}
+
+VmState vmstate_flag_greater_set_false(VmState state)
+{
+    state->flag.greater = 0x0;
+    return state;
+}
+
+unsigned int vmstate_flag_greater_get(VmState state)
+{
+    return state->flag.greater;
 }
 
 void vmstate_print(VmState state)
