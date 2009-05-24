@@ -1,53 +1,77 @@
-Design:
+Introduction
+=============
 
-1. Registers
+Almost every programmer dreams of building his own OS and Compiler, among
+other things, and I am no exception. But I didn't study computer science, so
+the finer arts of Parsing, Lexing, Ast Generation had eluded me for a long time.
 
-A,B,C,D,E,F (all are integers)
+Sometime in 2007, I started learning about compiler techniques and using them at work
+incrementally. And I have now understood, [F]Lex and its clones, Yacc|Bison and clones and
+AST generation. 
 
-PARAM1
-PARAM2
-PARAM3
+This project is to help me crystallize this understanding into a toy, but fully functional.
+Therefore, I aim to design a small toy language called 'my' in the spirit of mySQL, mySpace, and
+other 'my'-infected software ;)
 
-2. Instructions
+My will initially be designed from the back to the front, and the first backend will be a small
+simple bytecode interpreter. Obviously, it will be very naive and I will not expand its scope much,
+except to accomodate humble features of the language 'My'. There will also be an assembler for this
+interpreter and then eventually the My compiler which shall compile the My language into the My vm
+format.
 
-LOAD SOURCE, REGISTER:
-    SOURCE = literal, address, register
+If you wish to learn along with me, by all means, clone away.
 
-ADD SOURCE, Reg: 
-SUB
-MUL
-DIV
-
-STDOUT SOURCE
-STDIN REGISTER
-STDERR SOURCE
-
-LOAD = 00
-ADD = 10
-SUB = 11
-MUL = 12
-DIV = 13
-STDIN = 50
-STDOUT = 51
-STDERR = 52
+I building this in C, to keep to the true spirit of compiler writers of days or yore and I am striving to 
+make my code understandable first (performance is not even in the picture here). Hopefully, this will
+be usefull to more ppl than 'My'-self (ahem! no pun intended :P)
 
 
-ByteCode:
-MYVM01
+
+Vm Design
+============
+
+Myvm is a very very simple virtual machine. It has only 6 registers 'A' to 'F' and an instruction pointer.
+All programming will be done using these registers. To make matters worse, each register is 1byte, making
+it effectively useless for real work, but easy to implement :)
 
 
-Language:
+Byte Code Design
+================
 
-a = 1
-b = 2
+A break down of the binary that is recognized by the Myvm interpreter is broken down below:
 
-match c against {
-    a {
-        stdout(b);
-    }
+HEADER = MVM (3bytes)
+VERSION = 01 (1byte)
+Instruction Count = 4 bytes
+Code Segement Offset = 4 bytes
+Unused = 4 bytes
+Code Segment - remaining
 
-    b {
-        stdout(c);
+Executable Code Design
+======================
 
-    }
-}
+In the spirit of keeping things easy, I have decided to limit the instructions even further.
+Each instruction is just 3 bytes wide and is of a fixed format:
+
+OPCODE - 1byte
+SOURCE - 1byte
+TARGET - 1byte
+
+E.g. 0x000100
+
+So a Myvm binary will contain blocks of 3 bytes in the code segment and this will make things
+easier to code for.
+
+Status
+=======
+
+Currently, Myvm has been implemented with very few instructions. See below for more info.
+It can currently execute binaries in the agreed format and the examples/ folder contains some
+example which were hand assembled with a hex editor. This would be a good place to start
+learning from. The assembler is currently in the works.
+
+More Info
+==========
+
+Look into include/myvm.h instruction opcodes and register addresses. All currently implemented
+instructions are in ops.c
