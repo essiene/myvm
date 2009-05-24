@@ -65,7 +65,9 @@ easier to code for.
 Status
 =======
 
-Currently, Myvm has been implemented with very few instructions. See below for more info.
+Currently, Myvm has been implemented with very few instructions, but enough to implement
+simple comparisons and loops. See below for more info.
+
 It can currently execute binaries in the agreed format and the examples/ folder contains some
 example which were hand assembled with a hex editor. This would be a good place to start
 learning from. The assembler is currently in the works.
