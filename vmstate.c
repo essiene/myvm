@@ -38,6 +38,10 @@ VmState vmstate_new(VmFile vmfile)
     state->general.e = 0x00;
     state->general.f = 0x00;
 
+    state->flag.equal = 0x0;
+    state->flag.greater = 0x0;
+    state->flag.unused = 0x00;
+
     state->ip = vmfile_entry_get(vmfile) - 0x10; /* remove header size to adjust for zero */
     return state;
 }
