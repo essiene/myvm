@@ -1,6 +1,17 @@
 #include <stdlib.h>
 #include <myvm.h>
 
+enum OpCode {
+    LDR = 0x00,
+    ADD = 0x10,
+    SUB = 0x11,
+    MUL = 0x12,
+    DIV = 0x13,
+    IN = 0x50,
+    OUT = 0x51,
+    ERR = 0x52
+};
+
 struct _Vm {
     VmFile file;
     VmState state;
