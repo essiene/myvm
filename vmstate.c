@@ -25,6 +25,13 @@ VmState vmstate_new(VmFile vmfile)
         return NULL;
     }
 
+    state->general.a = 0x00;
+    state->general.b = 0x00;
+    state->general.c = 0x00;
+    state->general.d = 0x00;
+    state->general.e = 0x00;
+    state->general.f = 0x00;
+
     state->ip = vmfile_entry_get(vmfile) - 0x10; /* remove header size to adjust for zero */
     return state;
 }
