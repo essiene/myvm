@@ -9,7 +9,14 @@ enum OpCode {
     DIV = 0x13,
     IN = 0x50,
     OUT = 0x51,
-    ERR = 0x52
+    ERR = 0x52,
+    CMP = 0x60,
+    JMP = 0x70,
+    JPE = 0x71,
+    JNE = 0x72,
+    JPG = 0x73,
+    JNG = 0x74,
+    INC = 0x80
 };
 
 struct _Vm {
@@ -77,6 +84,20 @@ VmState vm_exec(VmState state, VmInst inst)
             state = op_out(state, inst);break;
         case ERR:
             state = op_err(state, inst);break;
+        case CMP:
+            state = op_cmp(state, inst);break;
+        case JMP:
+            state = op_jmp(state, inst);break;
+        case JPE:
+            state = op_jpe(state, inst);break;
+        case JNE:
+            break;
+        case JPG:
+            break;
+        case JNG:
+            break;
+        case INC:
+            state = op_inc(state, inst);break;
         default: break;
     }
 
