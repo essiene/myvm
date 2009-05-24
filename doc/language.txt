@@ -1,0 +1,68 @@
+Language Spec in BNF
+======================
+
+program = statements;
+
+statements = '$empty' |
+             statement |
+             statement statements;
+
+statement = assignment ';' |
+            match |
+            input ';' |
+            output ';' ;
+
+assignment = variable '=' expression;
+match = 'match' expression '{' 
+            match_clauses
+        '}';
+match_clauses = match_clause match_clauses;
+match_clause = expression '{' statements '}' |
+               expression contract '{' statements '}';
+
+contract = 'if' boolean;
+input = 'read' variable;
+output = 'print' expression;
+
+expression = arithmetic |
+             boolean |
+             variable |
+             number;
+
+boolean = expression '||' expression |
+          expression '&&' expression |
+          expression '>' expression |
+          expression '<' expression |
+          expression '<=' expression |
+          expression '>=' expression |
+          expression '==' expression |
+          expression '!=' expression |
+          '!' expression;
+
+arithmetic = factor '+' arithmetic |
+             factor '-' arithmetic |
+
+factor = arithmetic '*' arithmetic |
+         arithmetic '/' arithmetic ;
+
+variable = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
+
+number = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
+
+
+Example Code
+==================
+
+read a;
+read b;
+
+match a+b against {
+    3 {
+        print a
+    }
+
+    c if c > b {
+        stdout(c);
+
+    }
+}

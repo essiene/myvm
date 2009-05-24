@@ -1,0 +1,39 @@
+This is not yet finalized, but will look something like so:
+
+LDIR (0x76687382)- 00
+LDIM
+LDMR
+LDMM
+LDRR
+LDRM
+
+ADIR - 10
+ADIM
+ADMR
+ADMM
+ADRR
+ADRM
+
+
+SBIR - 11
+SBIM
+SBMR
+SBMM
+SBRR
+SBRM
+
+MLIR - 12
+MLIM
+...
+
+DVIR - 13
+
+INR_ - 50
+INM_
+
+OTR_ - 51
+OTM_
+
+ERR_ - 52
+ERM_
+
