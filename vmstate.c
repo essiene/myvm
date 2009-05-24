@@ -92,6 +92,23 @@ VmState vmstate_ip_inc(VmState state)
     return state;
 }
 
+VmState vmstate_flag_equal_set_true(VmState state)
+{
+    state->flag.equal = 0x1;
+    return state;
+}
+
+VmState vmstate_flag_equal_set_false(VmState state)
+{
+    state->flag.equal = 0x0;
+    return state;
+}
+
+unsigned int vmstate_flag_equal_get(VmState state)
+{
+    return state->flag.equal;
+}
+
 void vmstate_print(VmState state)
 {
     printf("Virtual Machine Registers\n");
