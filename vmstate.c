@@ -14,6 +14,11 @@ struct _VmState {
         enum Register f;
     } general;
 
+    struct {
+        unsigned int equal:1;
+        unsigned int unused: 7;
+    } flag;
+
     unsigned int ip;
 };
 
