@@ -17,6 +17,13 @@ typedef struct _VmState* VmState;
 VmState vmstate_new(VmFile);
 VmState vmstate_general_set(VmState, enum Register, unsigned char);
 VmState vmstate_ip_inc(VmState);
+/*TODO: Collaps flag functions like register functions*/
+VmState vmstate_flag_equal_set_true(VmState);
+VmState vmstate_flag_equal_set_false(VmState);
+VmState vmstate_flag_greater_set_true(VmState);
+VmState vmstate_flag_greater_set_false(VmState);
+unsigned int vmstate_flag_equal_get(VmState);
+unsigned int vmstate_flag_greater_get(VmState);
 unsigned char vmstate_general_get(VmState, enum Register);
 unsigned int vmstate_ip_get(VmState);
 void vmstate_print(VmState);
