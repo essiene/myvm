@@ -53,17 +53,17 @@ VmState vmstate_general_set(VmState state, enum Register reg, unsigned char data
 {
     switch(reg) {
         case RA:
-            state->general.a = data;
+            state->general.a = data;break;
         case RB:
-            state->general.b = data;
+            state->general.b = data;break;
         case RC:
-            state->general.c = data;
+            state->general.c = data;break;
         case RD:
-            state->general.d = data;
+            state->general.d = data;break;
         case RE:
-            state->general.e = data;
+            state->general.e = data;break;
         case RF:
-            state->general.f = data;
+            state->general.f = data;break;
     }
 
     return state;
