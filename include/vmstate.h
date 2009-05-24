@@ -25,6 +25,7 @@ VmState vmstate_flag_greater_set_false(VmState);
 unsigned int vmstate_flag_equal_get(VmState);
 unsigned int vmstate_flag_greater_get(VmState);
 unsigned char vmstate_general_get(VmState, enum Register);
+VmState vmstate_ip_set(VmState, unsigned int);
 unsigned int vmstate_ip_get(VmState);
 void vmstate_print(VmState);
 void vmstate_del(VmState);

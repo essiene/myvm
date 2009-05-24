@@ -82,6 +82,12 @@ VmState vmstate_general_set(VmState state, enum Register reg, unsigned char data
     return state;
 }
 
+VmState vmstate_ip_set(VmState state, unsigned int addr)
+{
+    state->ip = addr;
+    return state;
+}
+
 unsigned int vmstate_ip_get(VmState state)
 {
     return state->ip;
@@ -89,8 +95,7 @@ unsigned int vmstate_ip_get(VmState state)
 
 VmState vmstate_ip_inc(VmState state)
 {
-    state->ip += 1;
-    return state;
+    return vmstate_ip_set(state, state->ip + 1);
 }
 
 VmState vmstate_flag_equal_set_true(VmState state)
