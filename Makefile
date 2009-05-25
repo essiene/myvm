@@ -1,13 +1,19 @@
 CC=gcc
 CFLAGS=-Wall -pedantic -std=c99 -O1 -Iinclude
+LDFLAGS=-L./ -lmyvm
+AR=ar
+ARFLAGS=csr
 
 all: myvm
 	@echo "All done"
 
-myvm: vm.o ops.o vmstate.o vminst.o vmfile.o myvm.o
-	$(CC) -o myvm $+
+myvm: myvm.o libmyvm.a
+	$(CC) -o myvm myvm.o $(LDFLAGS)
 
+
+libmyvm.a: vm.o ops.o vmstate.o vminst.o vmfile.o
+	$(AR) $(ARFLAGS) $@ $+
 
 clean: 
-	rm -f *.o
+	rm -f *.o *.a
 	rm -f myvm
