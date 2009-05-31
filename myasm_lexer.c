@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 #define GETNEXT_OR_RETURN(sd, fd) \
-    sd = mgetchar(sd, fd); \
+    sd = get_next(sd, fd); \
     if(sd.eof) { \
         return sd.count; \
     } else
@@ -23,7 +23,7 @@ typedef struct {
     int eof;
 } StateData;
 
-StateData mgetchar(StateData, int);
+StateData get_next(StateData, int);
 int is_space(StateData);
 int is_num(StateData);
 int is_alpha(StateData);
@@ -32,183 +32,183 @@ int is_punctuation(StateData, char);
 
 int myasm_tokenize(int fd)
 {
-    StateData curr = {0, -1, 1, 0, 0};
+    StateData sdata = {0, -1, 1, 0, 0};
 
     state_1:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_space(curr)) {
+        if(is_space(sdata)) {
             goto state_1;
         }
 
-        if(is_alpha(curr)) {
+        if(is_alpha(sdata)) {
             goto state_2;
         }
 
-        REPORT_EXPECT(curr, "WhiteSpace | [a-zA-Z]");
+        REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z]");
 
     state_2:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_alpha(curr)) {
+        if(is_alpha(sdata)) {
             goto state_2;
         }
 
-        if(is_space(curr)) {
+        if(is_space(sdata)) {
             goto state_3;
         }
 
-        REPORT_EXPECT(curr, "WhiteSpace | [a-zA-Z]");
+        REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z]");
 
     state_3:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_space(curr)) {
+        if(is_space(sdata)) {
             goto state_3;
         }
 
-        if(is_punctuation(curr, '$')) {
+        if(is_punctuation(sdata, '$')) {
             goto state_4;
         }
 
-        if(is_punctuation(curr, '%')) {
+        if(is_punctuation(sdata, '%')) {
             goto state_6;
         }
 
-        REPORT_EXPECT(curr, "WhiteSpace | '$' | '%'");
+        REPORT_EXPECT(sdata, "WhiteSpace | '$' | '%'");
 
     state_4:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_num(curr)) {
+        if(is_num(sdata)) {
             goto state_5;
         }
 
-        REPORT_EXPECT(curr, "[0-9]");
+        REPORT_EXPECT(sdata, "[0-9]");
 
     state_5:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_num(curr)) {
+        if(is_num(sdata)) {
             goto state_5;
         }
 
-        if(is_space(curr)) {
+        if(is_space(sdata)) {
             goto state_8;
         }
 
-        if(is_punctuation(curr, ';')) {
+        if(is_punctuation(sdata, ';')) {
             goto state_1;
         }
 
-        REPORT_EXPECT(curr, "WhiteSpace | [0-9] | ';'");
+        REPORT_EXPECT(sdata, "WhiteSpace | [0-9] | ';'");
 
     state_6:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_a2f(curr)) {
+        if(is_a2f(sdata)) {
             goto state_7;
         }
 
-        REPORT_EXPECT(curr, "[a-fA-F]");
+        REPORT_EXPECT(sdata, "[a-fA-F]");
 
     state_7:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_space(curr)) {
+        if(is_space(sdata)) {
             goto state_8;
         }
 
-        if(is_punctuation(curr, ';')) {
+        if(is_punctuation(sdata, ';')) {
             goto state_1;
         }
 
-        REPORT_EXPECT(curr, "WhiteSpace | ';'");
+        REPORT_EXPECT(sdata, "WhiteSpace | ';'");
 
     state_8:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_space(curr)) {
+        if(is_space(sdata)) {
             goto state_8;
         }
 
-        if(is_punctuation(curr, ';')) {
+        if(is_punctuation(sdata, ';')) {
             goto state_1;
         }
 
-        if(is_punctuation(curr, '$')) {
+        if(is_punctuation(sdata, '$')) {
             goto state_9;
         }
 
-        if(is_punctuation(curr, '%')) {
+        if(is_punctuation(sdata, '%')) {
             goto state_11;
         }
 
-        REPORT_EXPECT(curr, "WhiteSpace | ';' | '$' | '%'");
+        REPORT_EXPECT(sdata, "WhiteSpace | ';' | '$' | '%'");
 
     state_9:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_num(curr)) {
+        if(is_num(sdata)) {
             goto state_10;
         }
 
-        REPORT_EXPECT(curr, "[0-9]");
+        REPORT_EXPECT(sdata, "[0-9]");
 
     state_10:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_num(curr)) {
+        if(is_num(sdata)) {
             goto state_10;
         }
 
-        if(is_space(curr)) {
+        if(is_space(sdata)) {
             goto state_13;
         }
 
-        if(is_punctuation(curr, ';')) {
+        if(is_punctuation(sdata, ';')) {
             goto state_1;
         }
 
-        REPORT_EXPECT(curr, "WhiteSpace | [0-9] | ';'");
+        REPORT_EXPECT(sdata, "WhiteSpace | [0-9] | ';'");
 
     state_11:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_a2f(curr)) {
+        if(is_a2f(sdata)) {
             goto state_12;
         }
 
-        REPORT_EXPECT(curr, "[a-fA-F]");
+        REPORT_EXPECT(sdata, "[a-fA-F]");
 
     state_12:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_space(curr)) {
+        if(is_space(sdata)) {
             goto state_13;
         }
 
-        if(is_punctuation(curr, ';')) {
+        if(is_punctuation(sdata, ';')) {
             goto state_1;
         }
 
-        REPORT_EXPECT(curr, "Whitespace | ';'");
+        REPORT_EXPECT(sdata, "Whitespace | ';'");
 
     state_13:
-        GETNEXT_OR_RETURN(curr, fd);
+        GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_space(curr)) {
+        if(is_space(sdata)) {
             goto state_13;
         }
 
-        if(is_punctuation(curr, ';')) {
+        if(is_punctuation(sdata, ';')) {
             goto state_1;
         }
 
-        REPORT_EXPECT(curr, "Whitespace | ';'");
+        REPORT_EXPECT(sdata, "Whitespace | ';'");
 }
 
-StateData mgetchar(StateData sd, int fd)
+StateData get_next(StateData sd, int fd)
 {
     unsigned char c;
 
