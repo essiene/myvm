@@ -23,6 +23,8 @@ typedef struct {
     int linenum;
     int linepos;
     int eof;
+    int tokens;
+    int lexeme_index;
     char lexeme[LEXEME_SIZE_MAX];
 } StateData;
 
@@ -35,9 +37,12 @@ int is_punctuation(StateData, char);
 
 int myasm_tokenize(int fd)
 {
-    StateData sdata = {0, -1, 1, 0, 0};
+    StateData sdata = {0, -1, 1, 0, 0, 0, 0};
 
     state_1:
+        sdata.lexeme_index = 0;
+        sdata.lexeme[sdata.lexeme_index] = '\0';
+
         GETNEXT_OR_RETURN(sdata, fd);
 
         if(is_space(sdata)) {
@@ -58,10 +63,18 @@ int myasm_tokenize(int fd)
         }
 
         if(is_space(sdata)) {
-            goto state_3;
+            goto state_3_extract_opcode;
         }
 
         REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z]");
+
+    state_3_extract_opcode:
+        sdata.lexeme[sdata.lexeme_index] = '\0';
+        printf("OPCODE: %s\n", sdata.lexeme);
+        sdata.lexeme_index = 0;
+        sdata.lexeme[sdata.lexeme_index] = '\0';
+        sdata.tokens += 1;
+        goto state_3;
 
     state_3:
         GETNEXT_OR_RETURN(sdata, fd);
@@ -97,11 +110,11 @@ int myasm_tokenize(int fd)
         }
 
         if(is_space(sdata)) {
-            goto state_8;
+            goto state_8_extract_opcode;
         }
 
         if(is_punctuation(sdata, ';')) {
-            goto state_1;
+            goto state_source_only;
         }
 
         REPORT_EXPECT(sdata, "WhiteSpace | [0-9] | ';'");
@@ -119,14 +132,22 @@ int myasm_tokenize(int fd)
         GETNEXT_OR_RETURN(sdata, fd);
 
         if(is_space(sdata)) {
-            goto state_8;
+            goto state_8_extract_opcode;
         }
 
         if(is_punctuation(sdata, ';')) {
-            goto state_1;
+            goto state_source_only;
         }
 
         REPORT_EXPECT(sdata, "WhiteSpace | ';'");
+
+    state_8_extract_opcode:
+        sdata.lexeme[sdata.lexeme_index] = '\0';
+        printf("SOURCE: %s\n", sdata.lexeme+1);
+        sdata.lexeme_index = 0;
+        sdata.lexeme[sdata.lexeme_index] = '\0';
+        sdata.tokens += 1;
+        goto state_8;
 
     state_8:
         GETNEXT_OR_RETURN(sdata, fd);
@@ -136,7 +157,7 @@ int myasm_tokenize(int fd)
         }
 
         if(is_punctuation(sdata, ';')) {
-            goto state_1;
+            goto state_source_only;
         }
 
         if(is_punctuation(sdata, '$')) {
@@ -148,6 +169,13 @@ int myasm_tokenize(int fd)
         }
 
         REPORT_EXPECT(sdata, "WhiteSpace | ';' | '$' | '%'");
+
+    state_source_only:
+        sdata.lexeme[sdata.lexeme_index-1] = '\0';
+        printf("SOURCE: %s\n", sdata.lexeme+1);
+        sdata.tokens += 1;
+        goto state_1;
+
 
     state_9:
         GETNEXT_OR_RETURN(sdata, fd);
@@ -170,7 +198,7 @@ int myasm_tokenize(int fd)
         }
 
         if(is_punctuation(sdata, ';')) {
-            goto state_1;
+            goto state_pre_1;
         }
 
         REPORT_EXPECT(sdata, "WhiteSpace | [0-9] | ';'");
@@ -192,7 +220,7 @@ int myasm_tokenize(int fd)
         }
 
         if(is_punctuation(sdata, ';')) {
-            goto state_1;
+            goto state_pre_1;
         }
 
         REPORT_EXPECT(sdata, "Whitespace | ';'");
@@ -205,10 +233,16 @@ int myasm_tokenize(int fd)
         }
 
         if(is_punctuation(sdata, ';')) {
-            goto state_1;
+            goto state_pre_1;
         }
 
         REPORT_EXPECT(sdata, "Whitespace | ';'");
+
+    state_pre_1:
+        sdata.lexeme[sdata.lexeme_index-1] = '\0';
+        printf("TARGET: %s\n", sdata.lexeme+1);
+        sdata.tokens += 1;
+        goto state_1;
 }
 
 StateData get_next(StateData sd, int fd)
@@ -233,8 +267,10 @@ StateData get_next(StateData sd, int fd)
         sd.linepos += 1;
     }
 
+    sd.lexeme[sd.lexeme_index] = c;
     sd.val = c;
     sd.count += 1;
+    sd.lexeme_index += 1;
     return sd;
 
     problem:
