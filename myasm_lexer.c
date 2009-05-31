@@ -2,6 +2,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#define LEXEME_SIZE_MAX 256
+
 #define GETNEXT_OR_RETURN(sd, fd) \
     sd = get_next(sd, fd); \
     if(sd.eof) { \
@@ -21,6 +23,7 @@ typedef struct {
     int linenum;
     int linepos;
     int eof;
+    char lexeme[LEXEME_SIZE_MAX];
 } StateData;
 
 StateData get_next(StateData, int);
