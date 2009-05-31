@@ -7,6 +7,7 @@
 #include "ops.h"
 #include "vm.h"
 
+#include "myasm.h"
 
 enum VmErrno {
     VM_EOK,
