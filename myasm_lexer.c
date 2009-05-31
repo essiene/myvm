@@ -11,6 +11,10 @@ typedef struct {
 } Symbol;
 
 Symbol mgetchar(Symbol, int);
+int is_space(Symbol);
+int is_num(Symbol);
+int is_alpha(Symbol);
+int is_punctuation(Symbol, char);
 
 Symbol mgetchar(Symbol sym, int fd)
 {
@@ -41,4 +45,49 @@ Symbol mgetchar(Symbol sym, int fd)
     problem:
         sym.eof = 1;
         return sym;
+}
+
+int is_space(Symbol sym)
+{
+    if(sym.val == '\t' || sym.val == ' ' || sym.val == '\n' || sym.val == '\r') {
+        return 1;
+    }
+
+    return 0;
+}
+
+int is_num(Symbol sym)
+{
+    if('0' <= sym.val && sym.val <= '9') {
+        return 1;
+    }
+
+    return 0;
+}
+
+int is_alpha(Symbol sym) 
+{
+    if(('a' <= sym.val && sym.val <= 'z') || ('A' <= sym.val && sym.val <= 'Z')) {
+        return 1;
+    }
+
+    return 0;
+}
+
+int is_a2f(Symbol sym)
+{
+    if(('a' <= sym.val && sym.val <= 'f') || ('A' <= sym.val && sym.val <= 'F')) {
+        return 1;
+    }
+
+    return 0;
+}
+
+int is_punctuation(Symbol sym, char d)
+{
+    if(sym.val == d) {
+        return 1;
+    }
+
+    return 0;
 }
