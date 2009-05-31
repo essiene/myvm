@@ -10,7 +10,7 @@
 
 
 #define REPORT_EXPECT(sym, str) \
-    printf("Lexical Error one Line %d, Position %d :\nExpecting: %s\nGot: %c\n", sym.linenum, sym.linepos, str, sym.val);\
+    printf("Lexical Error one Line %d, Position %d :\nExpecting: %s\nGot: '%c'\n", sym.linenum, sym.linepos, str, sym.val);\
     return sym.count; \
     if(1)
 
@@ -97,7 +97,11 @@ int myasm_tokenize(int fd)
             goto state_8;
         }
 
-        REPORT_EXPECT(curr, "WhiteSpace | [0-9]");
+        if(is_punctuation(curr, ';')) {
+            goto state_1;
+        }
+
+        REPORT_EXPECT(curr, "WhiteSpace | [0-9] | ';'");
 
     state_6:
         GETNEXT_OR_RETURN(curr, fd);
