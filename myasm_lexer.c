@@ -2,6 +2,19 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#define GETNEXT_OR_RETURN(sym, fd) \
+    sym = mgetchar(sym, fd); \
+    if(sym.eof) { \
+        return sym.count; \
+    } else
+
+
+#define REPORT_EXPECT(sym, str) \
+    printf("Lexical Error one Line %d, Position %d :\nExpecting: %s\nGot: %c\n", sym.linenum, sym.linepos, str, sym.val);\
+    return sym.count; \
+    if(1)
+
+
 typedef struct {
     int count;
     char val;
