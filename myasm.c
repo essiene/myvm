@@ -20,7 +20,7 @@ int main(int argc, char** argv)
     }
 
     int count = myasm_tokenize(fp);
-    printf("Processed %d tokens\n", count);
+    printf("Processed %d characters\n", count);
 
     return 0;
 }
