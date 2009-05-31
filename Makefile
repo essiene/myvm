@@ -10,8 +10,8 @@ all: myvm myasm
 myvm: myvm.o libmyvm.a
 	$(CC) -o myvm myvm.o $(LDFLAGS)
 
-myasm: myasm.o libmyvm.a
-	$(CC) -o myasm myasm.o $(LDFLAGS)
+myasm: myasm.o myasm_lexer.o libmyvm.a
+	$(CC) -o myasm myasm.o myasm_lexer.o $(LDFLAGS)
 
 
 libmyvm.a: vm.o ops.o vmstate.o vminst.o vmfile.o
