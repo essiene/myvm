@@ -29,6 +29,82 @@ int is_num(Symbol);
 int is_alpha(Symbol);
 int is_punctuation(Symbol, char);
 
+int myasm_tokenize(int fd)
+{
+    Symbol curr = {0, -1, 1, 0, 0};
+
+    state_1:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_space(curr)) {
+            goto state_1;
+        }
+
+        if(is_alpha(curr)) {
+            goto state_2;
+        }
+
+        REPORT_EXPECT(curr, "WhiteSpace | [a-zA-Z]");
+
+    state_2:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_alpha(curr)) {
+            goto state_2;
+        }
+
+        if(is_space(curr)) {
+            goto state_3;
+        }
+
+        REPORT_EXPECT(curr, "WhiteSpace | [a-zA-Z]");
+
+    state_3:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_space(curr)) {
+            goto state_3;
+        }
+
+        if(is_punctuation(curr, '$')) {
+            goto state_4;
+        }
+
+        if(is_punctuation(curr, '%')) {
+            goto state_6;
+        }
+
+        REPORT_EXPECT(curr, "WhiteSpace | '$' | '%'");
+
+    state_4:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_num(curr)) {
+            goto state_5;
+        }
+
+        REPORT_EXPECT(curr, "[0-9]");
+
+    state_5:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_num(curr)) {
+            goto state_5;
+        }
+
+        if(is_space(curr)) {
+            goto state_8;
+        }
+
+        REPORT_EXPECT(curr, "WhiteSpace | [0-9]");
+
+    state_6:
+    state_8:
+        goto state_1;
+        
+
+}
+
 Symbol mgetchar(Symbol sym, int fd)
 {
     unsigned char c;
