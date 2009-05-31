@@ -2,16 +2,16 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define GETNEXT_OR_RETURN(sym, fd) \
-    sym = mgetchar(sym, fd); \
-    if(sym.eof) { \
-        return sym.count; \
+#define GETNEXT_OR_RETURN(sd, fd) \
+    sd = mgetchar(sd, fd); \
+    if(sd.eof) { \
+        return sd.count; \
     } else
 
 
-#define REPORT_EXPECT(sym, str) \
-    printf("Lexical Error one Line %d, Position %d :\nExpecting: %s\nGot: '%c'\n", sym.linenum, sym.linepos, str, sym.val);\
-    return sym.count; \
+#define REPORT_EXPECT(sd, str) \
+    printf("Lexical Error one Line %d, Position %d :\nExpecting: %s\nGot: '%c'\n", sd.linenum, sd.linepos, str, sd.val);\
+    return sd.count; \
     if(1)
 
 
@@ -21,18 +21,18 @@ typedef struct {
     int linenum;
     int linepos;
     int eof;
-} Symbol;
+} StateData;
 
-Symbol mgetchar(Symbol, int);
-int is_space(Symbol);
-int is_num(Symbol);
-int is_alpha(Symbol);
-int is_a2f(Symbol);
-int is_punctuation(Symbol, char);
+StateData mgetchar(StateData, int);
+int is_space(StateData);
+int is_num(StateData);
+int is_alpha(StateData);
+int is_a2f(StateData);
+int is_punctuation(StateData, char);
 
 int myasm_tokenize(int fd)
 {
-    Symbol curr = {0, -1, 1, 0, 0};
+    StateData curr = {0, -1, 1, 0, 0};
 
     state_1:
         GETNEXT_OR_RETURN(curr, fd);
@@ -208,7 +208,7 @@ int myasm_tokenize(int fd)
         REPORT_EXPECT(curr, "Whitespace | ';'");
 }
 
-Symbol mgetchar(Symbol sym, int fd)
+StateData mgetchar(StateData sd, int fd)
 {
     unsigned char c;
 
@@ -224,60 +224,60 @@ Symbol mgetchar(Symbol sym, int fd)
     }
 
     if(c == '\n') { /*TODO: deal properly with newline on different OSes*/
-        sym.linenum += 1;
-        sym.linepos = 0;
+        sd.linenum += 1;
+        sd.linepos = 0;
     } else {
-        sym.linepos += 1;
+        sd.linepos += 1;
     }
 
-    sym.val = c;
-    sym.count += 1;
-    return sym;
+    sd.val = c;
+    sd.count += 1;
+    return sd;
 
     problem:
-        sym.eof = 1;
-        return sym;
+        sd.eof = 1;
+        return sd;
 }
 
-int is_space(Symbol sym)
+int is_space(StateData sd)
 {
-    if(sym.val == '\t' || sym.val == ' ' || sym.val == '\n' || sym.val == '\r') {
+    if(sd.val == '\t' || sd.val == ' ' || sd.val == '\n' || sd.val == '\r') {
         return 1;
     }
 
     return 0;
 }
 
-int is_num(Symbol sym)
+int is_num(StateData sd)
 {
-    if('0' <= sym.val && sym.val <= '9') {
+    if('0' <= sd.val && sd.val <= '9') {
         return 1;
     }
 
     return 0;
 }
 
-int is_alpha(Symbol sym) 
+int is_alpha(StateData sd) 
 {
-    if(('a' <= sym.val && sym.val <= 'z') || ('A' <= sym.val && sym.val <= 'Z')) {
+    if(('a' <= sd.val && sd.val <= 'z') || ('A' <= sd.val && sd.val <= 'Z')) {
         return 1;
     }
 
     return 0;
 }
 
-int is_a2f(Symbol sym)
+int is_a2f(StateData sd)
 {
-    if(('a' <= sym.val && sym.val <= 'f') || ('A' <= sym.val && sym.val <= 'F')) {
+    if(('a' <= sd.val && sd.val <= 'f') || ('A' <= sd.val && sd.val <= 'F')) {
         return 1;
     }
 
     return 0;
 }
 
-int is_punctuation(Symbol sym, char d)
+int is_punctuation(StateData sd, char d)
 {
-    if(sym.val == d) {
+    if(sd.val == d) {
         return 1;
     }
 
