@@ -27,6 +27,7 @@ Symbol mgetchar(Symbol, int);
 int is_space(Symbol);
 int is_num(Symbol);
 int is_alpha(Symbol);
+int is_a2f(Symbol);
 int is_punctuation(Symbol, char);
 
 int myasm_tokenize(int fd)
@@ -99,10 +100,108 @@ int myasm_tokenize(int fd)
         REPORT_EXPECT(curr, "WhiteSpace | [0-9]");
 
     state_6:
-    state_8:
-        goto state_1;
-        
+        GETNEXT_OR_RETURN(curr, fd);
 
+        if(is_a2f(curr)) {
+            goto state_7;
+        }
+
+        REPORT_EXPECT(curr, "[a-fA-F]");
+
+    state_7:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_space(curr)) {
+            goto state_8;
+        }
+
+        if(is_punctuation(curr, ';')) {
+            goto state_1;
+        }
+
+        REPORT_EXPECT(curr, "WhiteSpace | ';'");
+
+    state_8:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_space(curr)) {
+            goto state_8;
+        }
+
+        if(is_punctuation(curr, ';')) {
+            goto state_1;
+        }
+
+        if(is_punctuation(curr, '$')) {
+            goto state_9;
+        }
+
+        if(is_punctuation(curr, '%')) {
+            goto state_11;
+        }
+
+        REPORT_EXPECT(curr, "WhiteSpace | ';' | '$' | '%'");
+
+    state_9:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_num(curr)) {
+            goto state_10;
+        }
+
+        REPORT_EXPECT(curr, "[0-9]");
+
+    state_10:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_num(curr)) {
+            goto state_10;
+        }
+
+        if(is_space(curr)) {
+            goto state_13;
+        }
+
+        if(is_punctuation(curr, ';')) {
+            goto state_1;
+        }
+
+        REPORT_EXPECT(curr, "WhiteSpace | [0-9] | ';'");
+
+    state_11:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_a2f(curr)) {
+            goto state_12;
+        }
+
+        REPORT_EXPECT(curr, "[a-fA-F]");
+
+    state_12:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_space(curr)) {
+            goto state_13;
+        }
+
+        if(is_punctuation(curr, ';')) {
+            goto state_1;
+        }
+
+        REPORT_EXPECT(curr, "Whitespace | ';'");
+
+    state_13:
+        GETNEXT_OR_RETURN(curr, fd);
+
+        if(is_space(curr)) {
+            goto state_13;
+        }
+
+        if(is_punctuation(curr, ';')) {
+            goto state_1;
+        }
+
+        REPORT_EXPECT(curr, "Whitespace | ';'");
 }
 
 Symbol mgetchar(Symbol sym, int fd)
