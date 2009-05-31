@@ -7,6 +7,7 @@ typedef struct {
     char val;
     int linenum;
     int linepos;
+    int eof;
 } Symbol;
 
 Symbol mgetchar(Symbol, int);
@@ -38,6 +39,6 @@ Symbol mgetchar(Symbol sym, int fd)
     return sym;
 
     problem:
-        sym.val = -1;
+        sym.eof = 1;
         return sym;
 }
