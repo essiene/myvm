@@ -58,7 +58,7 @@ int myasm_tokenize(int fd)
         }
 
         if(is_punctuation(sdata, '$')) {
-            goto state_4;
+            goto state_5;
         }
 
         REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z] | '%' | '$'");
@@ -71,10 +71,18 @@ int myasm_tokenize(int fd)
         }
 
         if(is_space(sdata)) {
-            goto state_3_extract_opcode;
+            goto state_1;
         }
 
-        REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z]");
+        if(is_punctuation(sdata, '%')) {
+            goto state_3;
+        }
+
+        if(is_punctuation(sdata, '$')) {
+            goto state_5;
+        }
+
+        REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z] | '%' | '$'");
 
     state_3_extract_opcode:
         sdata.lexeme[sdata.lexeme_index] = '\0';
