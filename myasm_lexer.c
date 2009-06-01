@@ -16,6 +16,14 @@
     return sd.count; \
     if(1)
 
+#define EXTRACT_LEXEME(sd, type, start) \
+    sd.lexeme[sd.lexeme_index-1] = '\0'; \
+    printf("%s: %s\n", type, sd.lexeme+start); \
+    sd.tokens += 1; \
+    sd.lexeme[0] = sd.val; \
+    sd.lexeme_index = 1; \
+    sd.lexeme[sd.lexeme_index] = '\0'; \
+    if(1)
 
 typedef struct {
     int count;
@@ -70,6 +78,8 @@ int myasm_tokenize(int fd)
             goto state_2;
         }
 
+        EXTRACT_LEXEME(sdata, "Mnemonic", 0);
+
         if(is_space(sdata)) {
             goto state_1;
         }
@@ -95,6 +105,8 @@ int myasm_tokenize(int fd)
 
     state_4:
         GETNEXT_OR_RETURN(sdata, fd);
+
+        EXTRACT_LEXEME(sdata, "Register", 1);
 
         if(is_space(sdata)) {
             goto state_1;
@@ -129,6 +141,8 @@ int myasm_tokenize(int fd)
         if(is_num(sdata)) {
             goto state_6;
         }
+
+        EXTRACT_LEXEME(sdata, "Data", 1);
 
         if(is_space(sdata)) {
             goto state_1;
