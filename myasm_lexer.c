@@ -53,7 +53,15 @@ int myasm_tokenize(int fd)
             goto state_2;
         }
 
-        REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z]");
+        if(is_punctuation(sdata, '%')) {
+            goto state_3;
+        }
+
+        if(is_punctuation(sdata, '$')) {
+            goto state_4;
+        }
+
+        REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z] | '%' | '$'");
 
     state_2:
         GETNEXT_OR_RETURN(sdata, fd);
