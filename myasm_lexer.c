@@ -118,27 +118,35 @@ int myasm_tokenize(int fd)
         GETNEXT_OR_RETURN(sdata, fd);
 
         if(is_num(sdata)) {
-            goto state_5;
+            goto state_6;
         }
 
-        if(is_space(sdata)) {
-            goto state_8_extract_opcode;
-        }
-
-        if(is_punctuation(sdata, ';')) {
-            goto state_source_only;
-        }
-
-        REPORT_EXPECT(sdata, "WhiteSpace | [0-9] | ';'");
+        REPORT_EXPECT(sdata, "[0-9]");
 
     state_6:
         GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_a2f(sdata)) {
-            goto state_7;
+        if(is_num(sdata)) {
+            goto state_6;
         }
 
-        REPORT_EXPECT(sdata, "[a-fA-F]");
+        if(is_space(sdata)) {
+            goto state_1;
+        }
+
+        if(is_alpha(sdata)) {
+            goto state_2;
+        }
+
+        if(is_punctuation(sdata, '%')) {
+            goto state_3;
+        }
+
+        if(is_punctuation(sdata, '$')) {
+            goto state_5;
+        }
+
+        REPORT_EXPECT(sdata, "WhiteSpace | [0-9] | [a-zA-Z] | '%' | '$'");
 }
 
 StateData get_next(StateData sd, int fd)
