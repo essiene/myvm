@@ -7,7 +7,7 @@
 #define GETNEXT_OR_RETURN(sd, fd) \
     sd = get_next(sd, fd); \
     if(sd.eof) { \
-        return sd.count; \
+        return sd.tokens; \
     } else
 
 
