@@ -84,39 +84,35 @@ int myasm_tokenize(int fd)
 
         REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z] | '%' | '$'");
 
-    state_3_extract_opcode:
-        sdata.lexeme[sdata.lexeme_index] = '\0';
-        printf("OPCODE: %s\n", sdata.lexeme);
-        sdata.lexeme_index = 0;
-        sdata.lexeme[sdata.lexeme_index] = '\0';
-        sdata.tokens += 1;
-        goto state_3;
-
     state_3:
         GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_space(sdata)) {
-            goto state_3;
-        }
-
-        if(is_punctuation(sdata, '$')) {
+        if(is_a2f(sdata)) {
             goto state_4;
         }
 
-        if(is_punctuation(sdata, '%')) {
-            goto state_6;
-        }
-
-        REPORT_EXPECT(sdata, "WhiteSpace | '$' | '%'");
+        REPORT_EXPECT(sdata, "[a-f]");
 
     state_4:
         GETNEXT_OR_RETURN(sdata, fd);
 
-        if(is_num(sdata)) {
+        if(is_space(sdata)) {
+            goto state_1;
+        }
+
+        if(is_alpha(sdata)) {
+            goto state_2;
+        }
+
+        if(is_punctuation(sdata, '%')) {
+            goto state_3;
+        }
+
+        if(is_punctuation(sdata, '$')) {
             goto state_5;
         }
 
-        REPORT_EXPECT(sdata, "[0-9]");
+        REPORT_EXPECT(sdata, "WhiteSpace | [a-zA-Z] | '%' | '$'");
 
     state_5:
         GETNEXT_OR_RETURN(sdata, fd);
